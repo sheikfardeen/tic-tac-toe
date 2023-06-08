@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tic Tac Toe</title>
+    <style>
+      .board {
+        display: flex;
+        flex-wrap: wrap;
+        width: 306px;
+      }
+
+      .cell {
+        border: 1px solid black;
+        width: 100px;
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 40px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tic Tac Toe</h1>
+    <div class="board"></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const board = document.querySelector(".board");
+        const cells = [];
+
+        let currentPlayer = "X";
+        let gameover = false;
+
+        // Create the board
+        for (let i = 0; i < 9; i++) {
+          const cell = document.createElement("div");
+          cell.classList.add("cell");
+          cells.push(cell);
+          board.appendChild(cell);
+
+          cell.addEventListener("click", function () {
+            if (!gameover && cell.innerText === "") {
+              cell.innerText = currentPlayer;
+
+              if (checkWinner(currentPlayer)) {
+                gameover = true;
+                alert("Player " + currentPlayer + " wins!");
+              } else if (isBoardFull()) {
+                gameover = true;
+                alert("It's a tie!");
+              } else {
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+              }
+            }
+          });
+        }
+
+        function checkWinner(player) {
+          const winCombinations = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+          ];
+
+          for (let combination of winCombinations) {
+            const [a, b, c] = combination;
+            if (
+              cells[a].innerText === player &&
+              cells[b].innerText === player &&
+              cells[c].innerText === player
+            ) {
+              cells[a].style.backgroundColor = "lightgreen";
+              cells[b].style.backgroundColor = "lightgreen";
+              cells[c].style.backgroundColor = "lightgreen";
+              return true;
+            }
+          }
+
+          return false;
+        }
+
+        function isBoardFull() {
+          for (let cell of cells) {
+            if (cell.innerText === "") {
+              return false;
+            }
+          }
+          return true;
+        }
+      });
+    </script>
+  </body>
+</html>
